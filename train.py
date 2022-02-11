@@ -350,6 +350,7 @@ def main(args):
 
     print("Start training")
     start_time = time.time()
+    best = 0
     for epoch in range(args.start_epoch, args.epochs):
         if args.distributed:
             train_sampler.set_epoch(epoch)
@@ -358,7 +359,6 @@ def main(args):
         acc1 = evaluate(model, criterion, data_loader_test, device=device)
         if model_ema:
             evaluate(model_ema, criterion, data_loader_test, device=device, log_suffix="EMA")
-        best = 0
         if args.output_dir:
             checkpoint = {
                 "model": model_without_ddp.state_dict(),
